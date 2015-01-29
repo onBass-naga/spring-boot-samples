@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+#    url: jdbc:h2:file:/tmp/testdb
+    username: sa
+    password:
+  jpa:
+    hibernate.ddl-auto: create-drop
+thymeleaf.cache: false
+#server.port: 0
