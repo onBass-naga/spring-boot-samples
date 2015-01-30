@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head lang="ja">
+  <meta charset="UTF-8"/>
+  <title>ユーザー管理</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+        th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap-theme.min.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="col-sm-12">
+    <h1>ユーザー管理</h1>
+    <a th:href="@{/users/create}" class="form-horizontal" id="toCreatePage">新規登録する</a>
+    <hr/>
+    <table class="table table-striped table-bordered table-condensed">
+      <tr>
+        <th>ID</th>
+        <th>名前</th>
+        <th>メールアドレス</th>
+        <th>削除</th>
+      </tr>
+      <tr th:each="user : ${users}">
+        <td th:text="${user.id}">100</td>
+        <td th:text="${user.name}">山田</td>
+        <td th:text="${user.email}">hoge@example.com</td>
+        <td>
+          <form th:action="@{/users/delete}" method="post">
+            <input class="btn btn-danger" type="submit" value="削除する"/>
+            <input type="hidden" name="id" th:value="${user.id}"/>
+          </form>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

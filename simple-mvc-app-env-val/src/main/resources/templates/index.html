@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head lang="ja">
+  <meta charset="UTF-8"/>
+  <title>ユーザー管理</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+        th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}"/>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"
+        th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap-theme.min.css}"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <div class="col-sm-12">
+    <h1 th:text="${extConf.name}"></h1>
+    <p>messageに <span th:text="${extConf.message}"></span> が指定されました。</p>
+    <p>activeProfileに <span th:text="${extConf.activeProfile}"></span> が指定されました。</p>
+    <p>unscoValに <span th:text="${extConf.unscoVal}"></span> が指定されました。</p>
+    <p>rel.unscoValに <span th:text="${relConf.unscoVal}"></span> が指定されました。</p>
+    <p>rel.nameに <span th:text="${relConf.name}"></span> が指定されました。</p>
+    <hr/>
+    <p>Configクラスに直読み込んだJAVA_HOME: <span th:text="${extConf.javaHome}"></span></p>
+    <p>application.yml経由で読み込んだJAVA_HOME: <span th:text="${extConf.jHomeViaFile}"></span></p>
+    <p>Controllerで直読み込んだJAVA_HOME: <span th:text="${javaHomeViaController}"></span></p>
+  </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+        th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
+        th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
+</body>
+</html>

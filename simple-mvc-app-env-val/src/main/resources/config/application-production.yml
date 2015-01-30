@@ -1,0 +1,17 @@
+spring:
+  profiles: production
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+#    url: jdbc:h2:file:/tmp/testdb
+    username: sa
+    password:
+  jpa:
+    hibernate.ddl-auto: create-drop
+thymeleaf.cache: false
+#server.port: 0
+
+#以下、外部設定変数の実験のために使用
+env.name: 本番環境ですぞ
+rel.unsco_val: hoge_hoge_file
+jHome: ${JAVA_HOME}
