@@ -1,9 +1,9 @@
 package com.example.app.user;
 
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.NumberFormat;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -15,11 +15,10 @@ public class UserForm {
     @Size(min = 1, max = 9)
     private String id;
 
-    @NotNull
     @Size(min = 1, max = 50)
     private String name;
 
-    @NotNull
+    @NotBlank
     @Email
     private String email;
 
