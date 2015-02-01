@@ -12,8 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Created by naga on 2015/01/31.
  */
 @Configuration
-@EnableWebMvc  //（※１）
-public class MessageConfig extends WebMvcConfigurerAdapter {
+public class MessageConfig extends WebMvcConfigurerAdapter { //（※１）
 
     @Bean
     ReloadableResourceBundleMessageSource messageSource() {
