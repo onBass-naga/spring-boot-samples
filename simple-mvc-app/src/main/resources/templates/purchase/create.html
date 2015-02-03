@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head lang="ja">
+  <meta th:remove="all" charset="UTF-8"/>
+  <title>商品購入</title>
+  <link th:remove="all" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+  <link th:remove="all" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+  <link th:remove="all" rel="stylesheet" href="../../static/css/main.css"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1>商品購入</h1>
+  <div class="col-sm-12">
+    <form th:action="@{/purchase/confirm}" th:object="${purchaseForm}" class="form" method="post">
+      <fieldset>
+        <legend>ご購入商品</legend>
+        <table>
+          <thead>
+            <tr>
+              <th>商品名</th>
+              <th>金額</th>
+              <th>数量</th>
+            </tr>
+          </thead>
+          <tbody>
+            <span th:each="production, stat : ${productions}">
+                <tr>
+                  <input type="hidden" th:value="${production.id}" th:name="${'items[' + stat.index + '].itemId'}" />
+                  <input type="hidden" th:value="${production.name}" th:name="${'items[' + stat.index + '].itemName'}" />
+                  <input type="hidden" class="prices" th:id="${'price_' + stat.index}"
+                         th:value="${production.price}" th:name="${'items[' + stat.index + '].price'}" />
+                  <td rowspan="2" th:text="${production.name}">
+                    Gradle徹底入門 次世代ビルドツールによる自動化基盤の構築
+                  </td>
+                  <td th:text="${#numbers.formatInteger(production.price, 1, 'COMMA')}">4,104</td>
+                  <td class="form-group" th:classappend="${#fields.hasErrors('items[' + stat.index + '].quantity')}? 'has-error has-feedback'">
+                    <input type="number" class="quantities form-control" th:id="${'quantity_' + stat.index}" th:name="${'items[' + stat.index + '].quantity'}"
+                             th:field="*{items[__${stat.index}__].quantity}"
+                             th:readonly="${purchaseForm?.items?.size() ge stat.count} ? ${purchaseForm?.items?.get(stat.index)?.isLater} : false"/>
+                    <span th:if="${#fields.hasErrors('items[' + stat.index + '].quantity')}" th:errors="*{items[__${stat.index}__].quantity}" class="help-block">error!</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <input class="isLaters" th:id="${'isLater_' + stat.index}" th:name="${'items[' + stat.index + '].isLater'}"
+                           type="checkbox" value="true" th:checked="*{items[__${stat.index}__].isLater}" />&nbsp;今は買わない
+                  </td>
+                </tr>
+            </span>
+            <span th:remove="all">
+                <tr>
+                  <td rowspan="2">はじめてのSpring Boot</td>
+                  <td>2,700</td>
+                  <td><input type="number" /></td>
+                </tr>
+                <tr th:remove="all">
+                  <td colspan="2"><input type="checkbox" />&nbsp;今は買わない</td>
+                </tr>
+            </span>
+            <tr>
+              <td style="border: none"></td>
+              <td style="border: none">合計</td>
+              <td style="border: none">￥&nbsp;<span id="total">0</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:25px;" class="form-group" th:classappend="${#fields.hasErrors('paymentMethod')}? 'has-error has-feedback'">
+          <label class="col-sm-2 control-label">お支払い方法<br/>（必須）</label>
+          <div class="col-sm-10">
+            <span th:each="pm, stat : ${paymentMethods}">
+              <label for="paymentMethodCard" th:for="${'paymentMethod' + stat.index}" class="radio-inline" th:inline="text">
+                <input type="radio" id="paymentMethodCard" th:id="${'paymentMethod' + stat.index}" name="paymentMethod"
+                      class="form-control" th:value="${pm}" style="width: 1em;height: 1em;"
+                      th:checked="${pm} == *{paymentMethod}"/>[[${pm.label}]]&nbsp;
+              </label>
+              <label th:remove="all" for="paymentMethodChange" class="radio-inline">
+                <input type="radio" id="paymentMethodChange" th:id="${'paymentMethod' + stat.index}" name="paymentMethod"
+                       class="form-control" style="width: 1em;height: 1em;"/>代金引換
+              </label>
+            </span>
+            <span th:if="${#fields.hasErrors('paymentMethod')}" th:errors="*{paymentMethod}" class="help-block">error!</span>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset style="margin-top:5px;">
+        <legend>配送先</legend>
+        <div class="form-group" th:classappend="${#fields.hasErrors('prefecture') || #fields.hasErrors('address')}? 'has-error has-feedback'">
+          <label for="prefecture" class="col-sm-2 control-label">配送先住所<br/>（必須）</label>
+          <div class="col-sm-10">
+            <select class="form-control col-sm-2" id="prefecture" name="prefecture">
+              <option value="">都道府県を選択</option>
+              <option th:each="prefecture : ${prefectures}" th:value="${prefecture}" th:text="${prefecture.label}" th:selected="${prefecture} == *{prefecture}">北海道</option>
+            </select>
+            <input type="text" id="address" name="address" th:field="*{address}" class="form-control" value="国内のどっか"/>
+            <span th:if="${#fields.hasErrors('prefecture')}" th:errors="*{prefecture}" class="help-block">error!</span>
+            <span th:if="${#fields.hasErrors('address')}" th:unless="${#fields.hasErrors('prefecture')}" th:errors="*{address}" class="help-block">error!</span>
+          </div>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('name')}? 'has-error has-feedback'">
+          <label for="name" class="col-sm-2 control-label">宛名（必須）</label>
+          <div class="col-sm-10">
+            <input type="text" id="name" name="name" th:field="*{name}"
+                   class="form-control" value="山田 太郎"/>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="help-block">error!</span>
+          </div>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('tel')}? 'has-error has-feedback'">
+          <label for="tel" class="col-sm-2 control-label">電話番号（必須）</label>
+          <div class="col-sm-10">
+            <input type="text" id="tel" name="tel" th:field="*{tel}"
+                   class="form-control" value="000-0000-0000"/>
+                        <span th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}"
+                              class="help-block">error!</span>
+          </div>
+        </div>
+        <div class="form-group" th:classappend="${#fields.hasErrors('email')}? 'has-error has-feedback'">
+          <label for="email" class="col-sm-2 control-label">メールアドレス</label>
+          <div class="col-sm-10">
+            <input type="text" id="email" name="email" th:field="*{email}"
+                   class="form-control" value="hoge@example.com"/>
+                        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+                              class="help-block">error!</span>
+          </div>
+        </div>
+      </fieldset>
+      <hr/>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <input type="button" id="toTopPage" class="btn btn-default" name="goToTop" value="戻る"
+                 onclick="alert('サンプルなんで戻るのは未実装です');return false;" />
+          <input type="submit" id="edit" class="btn btn-primary" value="次へ"/>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"
+          th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"
+          th:src="@{/webjars/bootstrap/3.2.0/js/bootstrap.min.js}"></script>
+  <script type="application/javascript">
+    (function($){
+
+      var calcTotal = function() {
+        var total = 0;
+        $(".prices").each(function(i, it){
+          var price = $(it).val();
+          var id = $(it).attr("id").replace("price", "quantity");
+          var quantity = $("#" + id).val();
+          total += price * quantity;
+        })
+        $("#total").text(total.toLocaleString());
+      }
+
+      $(window).load(function() {
+        calcTotal();
+      })
+
+      $(".quantities").on("change", function() {
+        calcTotal();
+      })
+
+      $(".isLaters").on("change", function() {
+        var $isLater = $(this);
+        var id = $isLater.attr("id");
+        var $quantity = $("#" + id.replace("isLater", "quantity"));
+        if ($isLater.is(':checked')) {
+          $quantity.val(0);
+          $quantity.attr("readonly", "readonly");
+          calcTotal();
+        } else {
+          $quantity.removeAttr("readonly");
+        }
+      })
+
+    })(jQuery);
+  </script>
+</div>
+
+
+</body>
+</html>

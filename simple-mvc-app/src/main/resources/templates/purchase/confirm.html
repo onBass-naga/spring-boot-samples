@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head lang="ja">
+  <meta th:remove="all" charset="UTF-8"/>
+  <title>商品購入</title>
+  <link th:remove="all" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+  <link th:remove="all" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+  <link th:remove="all" rel="stylesheet" href="../../static/css/main.css"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1>商品購入内容のご確認</h1>
+  <div class="col-sm-12">
+    <form th:action="@{/purchase/complete}" th:object="${purchaseForm}" class="form" method="post">
+      <fieldset>
+        <legend>ご購入商品</legend>
+        <table>
+          <thead>
+            <tr>
+              <th>商品名</th>
+              <th>金額</th>
+              <th>数量</th>
+              <th>小計</th>
+            </tr>
+          </thead>
+          <tbody>
+            <span th:each="item, stat : *{items}">
+                <input type="hidden" th:value="${item.itemId}" th:name="${'items[' + stat.index + '].itemId'}" />
+                <input type="hidden" th:value="${item.itemName}" th:name="${'items[' + stat.index + '].itemName'}" />
+                <input type="hidden" th:value="${item.price}" th:name="${'items[' + stat.index + '].price'}" />
+                <input type="hidden" th:value="${item.quantity}" th:name="${'items[' + stat.index + '].quantity'}" />
+                <input type="hidden" th:value="${item.isLater}" th:name="${'items[' + stat.index + '].isLater'}" />
+                <tr th:if="${item.quantity gt 0}">
+                  <td th:text="${item.itemName}">Gradle徹底入門 次世代ビルドツールによる自動化基盤の構築</td>
+                  <td th:text="${#numbers.formatInteger(item.price, 1, 'COMMA')}">4,104</td>
+                  <td th:text="${#numbers.formatInteger(item.quantity, 1, 'COMMA')}">2</td>
+                  <td th:text="${#numbers.formatInteger(item.price * item.quantity, 1, 'COMMA')}">8,208</td>
+                </tr>
+            </span>
+            <span th:remove="all">
+                <tr>
+                  <td>はじめてのSpring Boot</td>
+                  <td>2,700</td>
+                  <td>1</td>
+                  <td>2,700</td>
+                </tr>
+            </span>
+            <tr>
+              <td style="border: none"></td>
+              <td style="border: none">合計</td>
+              <td colspan="2" style="border: none">￥&nbsp;<span th:text="${#numbers.formatInteger(totalPrice, 1, 'COMMA')}">10,908</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:25px;" >
+          <div class="col-sm-10">
+            <label class="col-sm-2 control-label">お支払い方法</label>
+            <span th:text="*{paymentMethod.label}">クレジットカード</span>
+            <input type="hidden" th:value="*{paymentMethod}" name="paymentMethod" />
+          </div>
+        </div>
+      </fieldset>
+      <fieldset style="margin-top:5px;">
+        <legend>配送先</legend>
+        <div class="container">
+          <div class="row">
+            <label class="col-sm-2">配送先住所</label>
+            <div class="col-sm-10">
+              <span th:text="*{prefecture.label}">北海道</span>&nbsp;<span th:text="*{address}">国内のどっか</span>
+              <input type="hidden" th:value="*{prefecture}" name="prefecture" />
+              <input type="hidden" th:value="*{address}" name="address" />
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2">宛名</label>
+            <div class="col-sm-10">
+              <span th:text="*{name}">山田 太郎</span>
+              <input type="hidden" th:value="*{name}" th:name="name" />
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2">電話番号</label>
+            <div class="col-sm-10">
+              <span th:text="*{tel}">000-0000-0000</span>
+              <input type="hidden" th:value="*{tel}" name="tel" />
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2">メールアドレス</label>
+            <div class="col-sm-10">
+              <span th:text="*{email}">hoge@example.com"</span>
+              <input type="hidden" th:value="*{email}" name="email" />
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <hr/>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <input type="button" id="toPage" class="btn btn-default" name="goToTop" value="内容を変更する"
+              onclick="alert('サンプルなんで戻るのは未実装です');return false;" />
+          <input type="submit" id="" class="btn btn-primary" value="注文を確定する"/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

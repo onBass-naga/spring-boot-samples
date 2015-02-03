@@ -1,0 +1,26 @@
+table {
+    width: 80%;
+    border: 1px solid #ccc;
+    margin-left: 10px;
+}
+tr {
+    border: 1px solid #ccc;
+}
+td, th {
+    margin: 2px;
+    padding: 2px;
+    border-left: 1px solid #ccc;
+}
+
+input[type=radio] {
+    box-shadow: none;
+    display: inline;
+}
+
+.inline {
+    display: inline;
+}
+
+div {
+    margin-bottom: 4px;
+}
