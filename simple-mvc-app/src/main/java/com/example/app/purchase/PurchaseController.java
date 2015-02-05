@@ -1,14 +1,15 @@
 package com.example.app.purchase;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,6 +19,9 @@ import java.util.List;
 @Controller
 @RequestMapping("purchase")
 public class PurchaseController {
+
+    @Autowired
+    PurchaseService purchaseService;
 
     @ModelAttribute
     PurchaseForm setUpForm() {
@@ -29,29 +33,27 @@ public class PurchaseController {
         return "redirect:/purchase/create";
     }
 
+    @RequestMapping(value="{key}", method = RequestMethod.GET)
+    public String show(@PathVariable(value = "key") Long id, Model model) {
+
+        Purchase purchase = purchaseService.findById(id);
+        model.addAttribute("purchase", purchase);
+
+        return "purchase/show";
+    }
+
     @RequestMapping(value="create", method = RequestMethod.GET)
     public String create(Model model) {
-        List<Production> productions = initProductions(); // サンプルなんで手抜き
+        List<Production> productions = purchaseService.findProductions(); // サンプルなんで手抜き
         model.addAttribute("productions", productions);
 
+        model.addAttribute("giftWrappings", Arrays.asList(GiftWrapping.values()));
         model.addAttribute("paymentMethods", Arrays.asList(PaymentMethod.values()));
         model.addAttribute("prefectures", Arrays.asList(Prefecture.values()));
         return "purchase/create";
     }
 
-    private List<Production> initProductions() {
 
-        List<Production> productions = new ArrayList<>();
-
-        productions.add(new Production(
-                1L, "Gradle徹底入門 次世代ビルドツールによる自動化基盤の構築", 4104));
-        productions.add(new Production(
-                2L, "はじめてのSpring Boot", 2700));
-        productions.add(new Production(
-                3L, "エリック・エヴァンスのドメイン駆動設計", 5616));
-
-        return productions;
-    }
 
     @RequestMapping(value="confirm", method = RequestMethod.POST)
     public String confirm(@Validated PurchaseForm form, BindingResult result, Model model) {
@@ -77,7 +79,7 @@ public class PurchaseController {
 
         // ここでも実際はチェックとかもろもろやることあるけど省略
 
-        // 永続化処理も省略
+        purchaseService.save(form);
 
         return "purchase/complete";
     }

@@ -66,6 +66,23 @@
             </tr>
           </tbody>
         </table>
+        <div style="margin-top:25px;" class="form-group" th:classappend="${#fields.hasErrors('giftWrapping')}? 'has-error has-feedback'">
+          <label class="col-sm-2 control-label">ギフトラッピング</label>
+          <div class="col-sm-10">
+            <span th:each="gw, stat : ${giftWrappings}">
+              <label for="giftWrappingCard" th:for="${'giftWrapping' + stat.index}" class="radio-inline" th:inline="text">
+                <input type="radio" id="giftWrappingCard" th:id="${'giftWrapping' + stat.index}" name="giftWrapping"
+                      class="form-control" th:value="${gw}" style="width: 1em;height: 1em;"
+                      th:checked="${gw} == *{giftWrapping}"/>[[${gw.label}]]&nbsp;
+              </label>
+              <label th:remove="all" for="giftWrappingCute" class="radio-inline">
+                <input type="radio" id="giftWrappingCute" th:id="${'giftWrapping' + stat.index}" name="giftWrapping"
+                       class="form-control" style="width: 1em;height: 1em;"/>キュート柄
+              </label>
+            </span>
+            <span th:if="${#fields.hasErrors('giftWrapping')}" th:errors="*{giftWrapping}" class="help-block">error!</span>
+          </div>
+        </div>
         <div style="margin-top:25px;" class="form-group" th:classappend="${#fields.hasErrors('paymentMethod')}? 'has-error has-feedback'">
           <label class="col-sm-2 control-label">お支払い方法<br/>（必須）</label>
           <div class="col-sm-10">

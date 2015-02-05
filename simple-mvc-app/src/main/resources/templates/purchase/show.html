@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<head lang="ja">
+  <meta th:remove="all" charset="UTF-8"/>
+  <title>商品購入</title>
+  <link th:remove="all" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+  <link th:remove="all" rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+  <link th:remove="all" rel="stylesheet" href="../../static/css/main.css"/>
+</head>
+<body>
+<div layout:fragment="content">
+  <h1>購入履歴詳細</h1>
+  <div class="col-sm-12" th:object="${purchase}">
+      <fieldset>
+        <legend>ご購入商品</legend>
+        <div style="margin-top:5px;" >
+          <div class="col-sm-10">
+            <label class="col-sm-2 control-label">ギフトラッピング</label>
+            <span th:text="*{giftWrapping.label}">キュート柄</span>
+          </div>
+        </div>
+        <div style="margin-top:5px;" >
+          <div class="col-sm-10">
+            <label class="col-sm-2 control-label">お支払い方法</label>
+            <span th:text="*{paymentMethod.label}">クレジットカード</span>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset style="margin-top:5px;">
+        <legend>配送先</legend>
+        <div class="container">
+          <div class="row">
+            <label class="col-sm-2">配送先住所</label>
+            <div class="col-sm-10">
+              <span th:text="*{prefecture.label}">北海道</span>&nbsp;<span th:text="*{address}">国内のどっか</span>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2">宛名</label>
+            <div class="col-sm-10">
+              <span th:text="*{name}">山田 太郎</span>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2">電話番号</label>
+            <div class="col-sm-10">
+              <span th:text="*{tel}">000-0000-0000</span>
+            </div>
+          </div>
+          <div class="row">
+            <label class="col-sm-2">メールアドレス</label>
+            <div class="col-sm-10">
+              <span th:text="*{email}">hoge@example.com"</span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+  </div>
+</div>
+
+</body>
+</html>

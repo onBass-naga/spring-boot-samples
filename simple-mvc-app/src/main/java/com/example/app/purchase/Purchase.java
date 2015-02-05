@@ -1,51 +1,49 @@
 package com.example.app.purchase;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.annotations.Type;
 
-import javax.validation.Valid;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 /**
  * Created by naga on 2015/01/29.
  */
-public class PurchaseForm {
+@Entity
+public class Purchase {
 
-    @Valid
-    private List<ItemForm> items;
+    @Id
+    @GeneratedValue
+    private Long id;
 
-    @NotNull
+    @Type(type="com.example.app.purchase.GiftWrappingType")
     private GiftWrapping giftWrapping;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
     @NotNull
+    @Enumerated(EnumType.ORDINAL)
     private Prefecture prefecture;
 
-    @NotBlank
     @Size(max = 100)
     private String address;
 
-    @NotBlank
     @Size(max = 50)
     private String name;
 
-    @NotBlank
     @Size(max = 50)
     private String tel;
 
-    @Email
     private String email;
 
-    public List<ItemForm> getItems() {
-        return items;
+    public Long getId() {
+        return id;
     }
 
-    public void setItems(List<ItemForm> items) {
-        this.items = items;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public GiftWrapping getGiftWrapping() {
