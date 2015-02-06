@@ -1,7 +1,5 @@
 package com.example.app.purchase;
 
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -16,7 +14,7 @@ public class Purchase {
     @GeneratedValue
     private Long id;
 
-    @Type(type="com.example.app.purchase.GiftWrappingType")
+    @Convert(converter = GiftWrappingConverter.class)
     private GiftWrapping giftWrapping;
 
     @NotNull
