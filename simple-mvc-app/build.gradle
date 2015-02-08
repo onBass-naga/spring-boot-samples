@@ -1,15 +1,24 @@
+import org.hibernate.dialect.PostgreSQL9Dialect
+
 buildscript {
     repositories {
+        mavenCentral()
         jcenter()
+        maven { url 'http://onbass-naga.github.io/mvn/' }
     }
     dependencies {
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.+'
         classpath 'org.springframework:springloaded:1.2.+'
+        classpath 'org.hibernate:hibernate-tools:4.3.1.CR1'
+
+        classpath fileTree(dir:'build/libs', include:'*.jar')
+        classpath 'area-b:gradle-hbm-schema-export-plugin:0.1'
     }
 }
 
 apply plugin: "java"
 apply plugin: 'spring-boot'
+apply plugin: 'hbm-schema-export'
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -21,10 +30,18 @@ repositories {
 }
 
 dependencies {
+
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
     compile 'com.h2database:h2:1.4.182' // jdbc-driverのjar読み込みが必要
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.webjars:bootstrap:3.2.0'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
+}
+
+schemaExport {
+    classpath = 'com/example/app/'
+    outputFile = 'sample.ddl'
+    delimiter = ';'
+    dialectClass = PostgreSQL9Dialect.class
 }
