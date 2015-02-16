@@ -1,4 +1,4 @@
-package com.example.app;
+package com.example.app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * Created by naga on 2015/01/31.
  */
 @Configuration
-public class MessageConfig extends WebMvcConfigurerAdapter { //（※１）
+public class MessageConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     ReloadableResourceBundleMessageSource messageSource() {

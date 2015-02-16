@@ -12,7 +12,7 @@ buildscript {
         classpath 'org.hibernate:hibernate-tools:4.3.1.CR1'
 
         classpath fileTree(dir:'build/libs', include:'*.jar')
-        classpath 'area-b:gradle-hbm-schema-export-plugin:0.1'
+        classpath 'area-b:gradle-hbm-schema-export-plugin:0.2'
     }
 }
 
@@ -26,7 +26,7 @@ version = '1.0'
 
 repositories {
     jcenter()
-//    mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
@@ -36,12 +36,15 @@ dependencies {
     compile 'com.h2database:h2:1.4.182' // jdbc-driverのjar読み込みが必要
     compile 'org.springframework.boot:spring-boot-starter-thymeleaf'
     compile 'org.webjars:bootstrap:3.2.0'
+    compile 'org.flywaydb:flyway-core'
+    compile 'org.postgresql:postgresql:9.3-1103-jdbc41'
+    compile 'org.springframework.boot:spring-boot-starter-logging'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
 }
 
 schemaExport {
     classpath = 'com/example/app/'
-    outputFile = 'sample.ddl'
+    outputFile = 'src/main/resources/db/migration/schema.sql'
     delimiter = ';'
     dialectClass = PostgreSQL9Dialect.class
 }

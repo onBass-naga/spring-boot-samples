@@ -1,9 +1,10 @@
-package com.example.app;
+package com.example.app.config;
 
 import org.h2.tools.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Profile;
 
 import java.sql.SQLException;
 
@@ -11,7 +12,8 @@ import java.sql.SQLException;
  * Created by naga on 2015/01/22.
  */
 @Configuration
-public class AppConfig {
+@Profile("dev")
+public class H2ServerConfig {
 
     // H2コンソールを使用可能にする。
     // http://localhost:8082/
@@ -20,10 +22,9 @@ public class AppConfig {
     Server createTcpServer() throws SQLException {
         return Server.createTcpServer("-tcp", "-tcpAllowOthers", "-tcpPort", "9092");
     }
+
     @Bean(name = "h2WebServer", initMethod = "start", destroyMethod = "stop")
     Server createWebServer() throws SQLException {
         return Server.createWebServer("-web", "-webAllowOthers", "-webPort", "8082");
     }
-
-
 }

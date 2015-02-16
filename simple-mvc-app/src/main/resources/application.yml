@@ -1,11 +1,37 @@
 spring:
+  profle:
+    active: dev
+
+---
+spring:
+  profiles: dev
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL
 #    url: jdbc:h2:file:/tmp/testdb
     username: sa
     password:
   jpa:
-    hibernate.ddl-auto: create-drop
-thymeleaf.cache: false
+    hibernate:
+      ddl-auto: create-drop
+  thymeleaf:
+    cache: false
+flyway:
+  enabled: false
 #server.port: 0
+
+---
+spring:
+  profiles: prod
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  thymeleaf:
+    cache: true
+flyway:
+  enabled: true
