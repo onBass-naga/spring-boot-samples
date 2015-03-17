@@ -48,6 +48,7 @@ var CommentBox = React.createClass({displayName: "CommentBox",
 });
 
 React.render(
-  React.createElement(CommentBox, {url: "http://localhost:8080/comments", pollInterval: 20000}),
+  React.createElement(CommentBox, {url: "http://localhost:8080/comments",
+    pollInterval: 2000}),
   document.getElementById('content')
 );
